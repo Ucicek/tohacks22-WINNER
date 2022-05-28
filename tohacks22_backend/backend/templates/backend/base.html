@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset="utf-8">
+    <title>Home Page</title>
+
+    <!-- Maybe install bootstrap and jquery later -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    {% block head %}
+    {% endblock head %}
+</head>
+<body>
+    <div class="base">
+        <h1>AI Images</h1>
+        <p>Note: the following model has a 77% accuracy</p>
+    </div>
+    {% block body %}
+    {% endblock body %}
+</body>
+{% block scripts %}
+{% endblock scripts %}
+</html>

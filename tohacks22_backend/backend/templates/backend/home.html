@@ -1,0 +1,46 @@
+{% extends 'backend/base.html' %}
+{% load i18n %}
+{% load static %}
+
+<!-- head block -->
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock head %}
+
+<!-- body block -->
+{% block body %}
+<!-- List of uploaded documents -->
+{% if images %}
+    All images in the database:
+    <ul>
+        {% for image in images %}
+            <li><a href="{% url 'image' image.pk %}">{{ image.image_file.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No documents.</p>
+{% endif %}
+
+<!-- Upload form. Note enctype attribute! -->
+<h2>AI Image Upload</h2>
+<form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ msg }}
+    <p>{{ form.non_field_errors }}</p>
+
+    <p>{{ form.image_file.label_tag }} {{ form.image_file.help_text }}</p>
+
+    <p>
+        {{ form.image_file.errors }}
+        {{ form.image_file }}
+    </p>
+
+    <p><input type="submit" value="Upload"/></p>
+</form>
+
+{% endblock body %}
+
+<!-- scripts block -->
+{% block scripts %}
+
+{% endblock scripts %}
