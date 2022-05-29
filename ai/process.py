@@ -178,7 +178,7 @@ text_to_int = {
     'Negative' : 1,
     'Neutral' : 2,
     'Positive' : 3,
-    'Super Positive' : 4
+    'Super positive' : 4
 }
 
 int_to_text = {
@@ -186,7 +186,7 @@ int_to_text = {
     1 : 'Negative',
     2 : 'Neutral',
     3 : 'Positive',
-    4 : 'Super Positive'
+    4 : 'Super positive'
 }
 
 def enter_into_db(conn, dict_result, dict_classifications):

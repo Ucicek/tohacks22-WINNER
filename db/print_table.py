@@ -47,3 +47,7 @@ def print_phrases(conn):
 
 # conn = psycopg2.connect(auth_key)
 # print_tables(conn)
+
+if __name__ == "__main__":
+    conn = psycopg2.connect(auth_key)
+    print_tables(conn)

@@ -7,8 +7,21 @@ from db.env import auth_key
 # value is an arr/tuple of 4 elements
 def insert_into_speech_segments(conn, value):
     with conn.cursor() as cur:
-        cur.execute("SELECT DISTINCT segment_id FROM speech_segments ORDER BY segment_id DESC LIMIT 1")
-        id = 1 if not cur.fetchall() else cur.fetchall()[0][0] + 1
+        #cur.execute("SELECT DISTINCT segment_id FROM speech_segments ORDER BY segment_id DESC LIMIT 1")
+        cur.execute("SELECT * FROM speech_segments ORDER BY segment_id DESC")
+        try:
+            f = cur.fetchall()
+            if len(f) > 0:
+                id = f[0][0]+1
+            else:
+                id = 1 
+
+        except IndexError:
+            #id = 1
+            print("INDEX ERROR")
+            print("Printing cur.fetchall()")
+            print(f)
+
         conn.commit()
 
         cur.execute("""INSERT INTO speech_segments \
@@ -24,7 +37,11 @@ def insert_into_speech_segments(conn, value):
 def insert_into_phrases(conn, value):
     with conn.cursor() as cur:
         cur.execute("SELECT DISTINCT phraseid FROM phrases ORDER BY phraseid DESC LIMIT 1")
-        id = 1 if not cur.fetchall() else cur.fetchall()[0][0] + 1
+        f = cur.fetchall()
+        if len(f) > 0:
+            id = f[0][0] + 1
+        else:
+            id = 0
         conn.commit()
 
         cur.execute("""INSERT INTO phrases \
