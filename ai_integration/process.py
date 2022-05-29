@@ -5,9 +5,9 @@ import requests
 import websockets
 from time import sleep
 from datetime import datetime
-from configure import auth_key
+from configure import assemblyai_auth_key, cohere_auth_key
 
-api_key = 'KZyl9VEB48EaDmsfJFOA4mMS53AsYrsBCZTSK7vg'
+api_key = cohere_auth_key
 
 import wave
 import pyaudio
@@ -87,7 +87,7 @@ def transcribe_segment(fpath):
     """
 
     headers = {
-       "authorization": auth_key,
+       "authorization": assemblyai_auth_key,
        "content-type": "application/json"
     }
     

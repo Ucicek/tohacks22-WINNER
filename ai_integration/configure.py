@@ -1,1 +1,2 @@
-auth_key="3b6979f90dc14e2cb98208a9697add3a"
+assemblyai_auth_key="3b6979f90dc14e2cb98208a9697add3a"
+cohere_auth_key="KZyl9VEB48EaDmsfJFOA4mMS53AsYrsBCZTSK7vg"

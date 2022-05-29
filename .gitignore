@@ -1,3 +1,4 @@
 tohacks22_backend_reference
 secret_codes
-database_connection/env.txt
+database_connection/env.py
+ai_integration/configure.py
