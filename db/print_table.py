@@ -45,5 +45,5 @@ def print_phrases(conn):
             print(row)
 
 
-# conn = psycopg2.connect(auth_key)
-# print_tables(conn)
+conn = psycopg2.connect(auth_key)
+print_tables(conn)
