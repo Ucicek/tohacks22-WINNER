@@ -1,11 +1,14 @@
 # importing the libraries
 import os
+from this import d
+import psycopg2
 import PySimpleGUI as sg
 import time
 import pyaudio
 import cohere
 from cohere.classify import Example
 import ai.process as pr
+from db.env import auth_key
 
 FRAMES_PER_BUFFER = 3200
 FORMAT = pyaudio.paInt16
@@ -16,6 +19,7 @@ api_key = 'KZyl9VEB48EaDmsfJFOA4mMS53AsYrsBCZTSK7vg'
 
 p_obj = pyaudio.PyAudio()
 co = cohere.Client(f'{api_key}')
+conn = psycopg2.connect(auth_key)
 
 # layout code for the GUI itself
 layout = [  
@@ -72,6 +76,7 @@ while True:
         if os.path.exists(fname):
             os.remove(fname)
 
+        pr.enter_into_db(conn, dict_result, dict_classifciation)
         print(dict_classifciation)
 
     # submitting a .wav file

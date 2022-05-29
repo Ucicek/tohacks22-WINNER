@@ -1,10 +1,10 @@
 import psycopg2
 from psycopg2.errors import SerializationFailure
 from datetime import datetime
-from env import auth_key
+from db.env import auth_key
 
 
-# value is an arr/tuple of 5 elements
+# value is an arr/tuple of 4 elements
 def insert_into_speech_segments(conn, value):
     with conn.cursor() as cur:
         cur.execute("SELECT DISTINCT segment_id FROM speech_segments ORDER BY segment_id DESC LIMIT 1")
@@ -14,8 +14,10 @@ def insert_into_speech_segments(conn, value):
         cur.execute("""INSERT INTO speech_segments \
             (segment_id, time_stamp, full_text, max_danger, min_danger, avg_danger) \
             VALUES (%s, %s, %s, %s, %s, %s);
-        """, (id, value[0], value[1], value[2], value[3], value[4]))
+        """, (id, str(datetime.now().strftime("%m/%d/%Y, %H:%M:%S")), value[0], value[1], value[2], value[3]))
     conn.commit()
+
+    return id
 
 
 # value is an arr/tuple of 4 elements
@@ -30,6 +32,8 @@ def insert_into_phrases(conn, value):
             VALUES (%s, %s, %s, %s, %s); \
         """, (id, value[0], value[1], value[2], value[3]))
     conn.commit()
+
+    return id
 
 conn = psycopg2.connect(auth_key)
 

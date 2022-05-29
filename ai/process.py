@@ -1,6 +1,7 @@
 import sys
 sys.path.append('../')
 
+import numpy as np
 import json
 import base64
 import asyncio
@@ -8,6 +9,7 @@ import requests
 import websockets
 from time import sleep
 from datetime import datetime
+from db.insert_into_table import insert_into_phrases, insert_into_speech_segments
 from ai.configure import assemblyai_auth_key, cohere_auth_key
 
 api_key = cohere_auth_key
@@ -170,4 +172,66 @@ def predict_danger(input, co):
         dict_classifications.update({classification.input : (label, confidence_score)})
 
     return dict_classifications
+
+text_to_int = {
+    'Super Negative' : 0,
+    'Negative' : 1,
+    'Neutral' : 2,
+    'Positive' : 3,
+    'Super Positive' : 4
+}
+
+int_to_text = {
+    0 : 'Super Negative',
+    1 : 'Negative',
+    2 : 'Neutral',
+    3 : 'Positive',
+    4 : 'Super Positive'
+}
+
+def enter_into_db(conn, dict_result, dict_classifications):
+    """
+    Makes insertions into db and returns segment id of entry
+
+    :param dict_result: transcribed text dictionary (transcribe_segment)
+    :param dict_classifications: classification dict (predict_danger)
+    :return seg_id: the segment id of the entered segment.
+    """
+
+    phrases = []
+    danger_scores = []
+    danger_scores_vals = []
+    danger_confidences = []
+
+    for k, v in dict_classifications.items():
+        phrases.append(k)
+        danger_scores.append(v[0])
+        danger_confidences.append(v[1])
+        danger_scores_vals.append(text_to_int[v[0]])
+    
+    mean_danger_score_val = np.mean(danger_scores_vals)
+    max_danger_score_val = np.max(danger_scores_vals)
+    min_danger_score_val = np.min(danger_scores_vals)
+
+    mean_danger_score = int_to_text[int(mean_danger_score_val)]
+    max_danger_score = int_to_text[int(max_danger_score_val)]
+    min_danger_score = int_to_text[int(min_danger_score_val)]
+
+    seg_values = [dict_result['text'], max_danger_score, 
+                    min_danger_score, mean_danger_score]
+    seg_id = insert_into_speech_segments(conn, seg_values)
+
+    for i in range(len(phrases)):
+        phrase_values = [seg_id, phrases[i], danger_scores[i], 
+                            danger_confidences[i]]
+        phrase_id = insert_into_phrases(conn, phrase_values)
+
+    return seg_id
+
+
+    
+
+
+
+
 
