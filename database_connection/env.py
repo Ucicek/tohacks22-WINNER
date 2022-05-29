@@ -1,0 +1,1 @@
+auth_key='postgresql://rayaq:J6qmyvR3OjIHYKixv3kIYQ@free-tier14.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&options=--cluster%3Dtohacks22-2356'
