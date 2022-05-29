@@ -4,12 +4,27 @@
 
 <!-- head block -->
 {% block head %}
-<title>Safe Space</title>
+<title>Protected View (#{{pk}})</title>
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
 <style>
+    .title{
+        color: black;
+        text-align: center;
+        font-size: large;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        margin-top: 50px;
+    }
+
+    .phrase{
+        text-align: center;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        margin-top: 50px;
+        font-size: small;
+    }
+        
     .table{
-        margin-top: 75px ;
+        margin-top:50px ;
         text-align: center;
     }
 </style>
@@ -18,23 +33,24 @@
 <!-- body block -->
 {% block body %}
 <div class="container title">
-    <h1 class="txt">Safe Space</h1>
+    <h1 class="'txt">Protected View (#{{pk}})</h1>
+</div>
+<div class="phrase">
+    <h3>{{full_text}}</h3>
 </div>
 <div class="container">
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col-1">Segment ID</th>
-                <th scope="col">Time</th>
-                <th scope="col">Max Danger</th>
-                <th scope="col">Min Danger</th>
-                <th scope="col">Average Danger</th>
+                <th scope="col-1">Phrase ID</th>
+                <th scope="col">Phrase</th>
+                <th scope="col">Danger (Precision)</th>
             </tr>
         </thead>
         <tbody>
-            {% for col in home_data %} 
+            {% for view in protected_view_data %}
                 <tr>
-                    {% for val in col %}
+                    {% for val in view %}
                         {% if forloop.counter0 == 0 %}
                             <th scope="row">{{val}}</th>
                         {% else %}
@@ -46,13 +62,6 @@
         </tbody>
     </table>
 </div>
-<!-- {% for s in home_data %}
-<ol>
-    {% for val in s %} 
-        <li>{{val}}</li>
-    {% endfor %}
-</ol>
-{% endfor %} -->
 {% endblock body %}
 
 <!-- scripts block -->

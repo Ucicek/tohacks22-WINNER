@@ -7,7 +7,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('', views.homeview, name='home'),
-    # path('image/<int:pk>/', views.imageview, name='image')
+    path('protected/<int:pk>/', views.protected_view, name='protected')
 ]
 
 urlpatterns += staticfiles_urlpatterns()
