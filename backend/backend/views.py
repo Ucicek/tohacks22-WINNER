@@ -26,6 +26,8 @@ def homeview(request):
         home_data.append(home_t)
     speech_segments = ss
 
+    print(speech_segments)
+
 
     context = {
         'msg': 'hello world',

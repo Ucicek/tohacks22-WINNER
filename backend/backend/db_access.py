@@ -116,7 +116,7 @@ def print_phrases(conn):
 # we are going to get access to all of the values in the database
 def get_table_values(conn):
     with conn.cursor() as cur:
-        cur.execute("""SELECT * FROM (
+        cur.execute("""SELECT segment_id, time_stamp, full_text, min_danger, max_danger, avg_danger FROM (
                 SELECT * FROM speech_segments
                 ORDER BY segment_id DESC
             ) SQ
@@ -143,7 +143,7 @@ def get_table_values(conn):
 
 def get_speech_segments(conn):
     with conn.cursor() as cur:
-        cur.execute("""SELECT * FROM (
+        cur.execute("""SELECT segment_id, time_stamp, full_text, min_danger, max_danger, avg_danger FROM (
                 SELECT * FROM speech_segments
                 ORDER BY segment_id DESC
             ) SQ
