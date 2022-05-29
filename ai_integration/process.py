@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../')
+
 import json
 import base64
 import asyncio
@@ -5,7 +8,7 @@ import requests
 import websockets
 from time import sleep
 from datetime import datetime
-from configure import assemblyai_auth_key, cohere_auth_key
+from ai_integration.configure import assemblyai_auth_key, cohere_auth_key
 
 api_key = cohere_auth_key
 
@@ -22,14 +25,17 @@ RATE = 16000
 p = pyaudio.PyAudio()
 co = cohere.Client(f'{api_key}')
 
-def record_segment(len, idx=0):
+def record_segment(len, p=p, idx=0):
     """
     Records a segment of data, stores the wav file.
 
     :param len: length of recording in seconds
+    :param p: pyaduio.PyAudio() object
     :param idx: idx of your recording for filepath
     :return filepath: path to mp3 file
     """
+
+    print(p)
 
     #starts recording
     stream = p.open(
@@ -136,11 +142,12 @@ def transcribe_segment(fpath):
 
     return {'text' : str(polling_response.json()["text"]), 'phrases' : corrected_phrases}
 
-def predict_danger(input):
+def predict_danger(input, co):
     """
     Predicts danger level of inputs. 
 
     :param input: list of input phrases
+    :param co: cohere.Client(f'{api_key}') object
     :return output: output predictions
     """
 
@@ -148,7 +155,7 @@ def predict_danger(input):
         model='medium',
         taskDescription='',
         outputIndicator='',
-        inputs=dict_result['phrases'],
+        inputs=input,
         examples=[Example("How did you manage to fail the exam.", "Negative"), Example("You do not understand", "Negative"), Example("Can you not do that", "Negative"), Example("You are so bad", "Negative"), Example("You always give up ", "Negative"), Example("Harrison Ford is 6’1”.", "Neutral"), Example("Yesterday, he traded in his Android for an iPhone.", "Neutral"), Example("Where are you from?", "Neutral"), Example("Are you okay?", "Neutral"), Example("Please help me", "Neutral"), Example("I don’t understand you", "Neutral"), Example("How are you doing?", "Neutral"), Example("What is that", "Neutral"), Example("Can you give me that?", "Neutral"), Example("I can do that", "Neutral"), Example("This a sofa", "Neutral"), Example("This is Jackso n", "Neutral"), Example("He is a guy", "Neutral"), Example("She is a girl", "Neutral"), Example("I am feeling good today.", "Positive"), Example("In three years, everyone will be happy.", "Positive"), Example("Have a good day! ", "Positive"), Example("You are doing very well.", "Positive"), Example("Proud of you!", "Positive"), Example("How can you be so stupid.", "Super Negative"), Example("Don\'t get near me.", "Super Negative"), Example("I hate you.", "Super Negative"), Example("You are sick.", "Super Negative"), Example("You deserve death.", "Super Negative"), Example("Wow, you are super tall.", "Super positive"), Example("Good job on getting 100%.", "Super positive"), Example("You are so talented at this! ", "Super positive"), Example("You are handsome", "Super positive"), Example("I’m behind you 100%.", "Super positive"), Example("Your skirt is so pretty.", "Super positive"), Example("You look great today.", "Super positive"), Example("You’re a fantastic cook.", "Super positive"), Example("You have the best style.", "Super positive"), Example("You are the best", "Super positive"), Example("You are pretty", "Super positive"), Example("I got a 100%", "Super positive"), Example("You are good looking", "Super positive"), Example("I wish I was like you", "Super positive"), Example("You are cute", "Super positive"), Example("I love my parents", "Super positive"), Example("You are the nicest person ever", "Super positive"), Example("I love my friends", "Super positive"), Example("I feel very nice", "Super positive"), Example("I am feeling very good", "Super positive"), Example("I like your dog", "Super positive")])
 
     dict_classifications = {}
@@ -163,13 +170,4 @@ def predict_danger(input):
         dict_classifications.update({classification.input : (label, confidence_score)})
 
     return dict_classifications
-    
-
-fname = record_segment(20, 0)
-dict_result = transcribe_segment(fname)
-print(dict_result['text'])
-print(dict_result['phrases'])
-
-dict_classifciation = predict_danger(dict_result['phrases'])
-print(dict_classifciation)
 
