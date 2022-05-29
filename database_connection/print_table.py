@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.errors import SerializationFailure
 import time
+from env import auth_key
 
 
 def print_tables(conn):
@@ -44,7 +45,5 @@ def print_phrases(conn):
             print(row)
 
 
-db_url = ''
-conn = psycopg2.connect(db_url)
-
-print_tables(conn)
+# conn = psycopg2.connect(auth_key)
+# print_tables(conn)

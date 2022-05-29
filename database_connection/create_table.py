@@ -1,35 +1,35 @@
 import psycopg2
 from psycopg2.errors import SerializationFailure
-# import logging
+from env import auth_key
 
 
 def create_tables(conn):
     with conn.cursor() as cur:
-        cur.execute(
-            "CREATE TABLE IF NOT EXISTS speech_segments ( \
-                segment_id INT PRIMARY KEY, \
-                time_stamp DATE, \
-                full_text TEXT, \
-                max_danger TEXT, \
-                min_danger TEXT, \
-                avg_danger TEXT \
-            )"
+        cur.execute("""CREATE TABLE IF NOT EXISTS speech_segments ( \
+                    segment_id INT PRIMARY KEY NOT NULL, \
+                    time_stamp TEXT, \
+                    full_text TEXT, \
+                    max_danger TEXT, \
+                    min_danger TEXT, \
+                    avg_danger TEXT \
+                )
+            """
         )
-        cur.execute(
-            "CREATE TABLE IF NOT EXISTS phrases ( \
-                phraseid INT PRIMARY KEY, \
-                segment_id INT, \
-                phrase TEXT, \
-                danger TEXT, \
-                danger_precise DECIMAL \
-            )"
+    conn.commit()
+
+    with conn.cursor() as cur:
+        cur.execute("""CREATE TABLE IF NOT EXISTS phrases ( \
+                    phraseid INT PRIMARY KEY NOT NULL, \
+                    segment_id INT, \
+                    phrase TEXT, \
+                    danger TEXT, \
+                    danger_precise DECIMAL, \
+                    FOREIGN KEY (segment_id) REFERENCES speech_segments(segment_id) \
+                )
+            """
         )
-        # logging.debug("create_accounts(): status message: %s",
-        #               cur.statusmessage)
     conn.commit()
 
 
-db_url = ''
-conn = psycopg2.connect(db_url)
-
-create_tables(conn)
+# conn = psycopg2.connect(auth_key)
+# create_tables(conn)
