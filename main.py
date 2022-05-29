@@ -5,7 +5,7 @@ import time
 import pyaudio
 import cohere
 from cohere.classify import Example
-import ai_integration.process as pr
+import ai.process as pr
 
 FRAMES_PER_BUFFER = 3200
 FORMAT = pyaudio.paInt16

@@ -8,7 +8,7 @@ import requests
 import websockets
 from time import sleep
 from datetime import datetime
-from ai_integration.configure import assemblyai_auth_key, cohere_auth_key
+from ai.configure import assemblyai_auth_key, cohere_auth_key
 
 api_key = cohere_auth_key
 
