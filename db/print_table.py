@@ -45,14 +45,9 @@ def print_phrases(conn):
             print(row)
 
 
-<<<<<<< HEAD
-conn = psycopg2.connect(auth_key)
-print_tables(conn)
-=======
 # conn = psycopg2.connect(auth_key)
 # print_tables(conn)
 
 if __name__ == "__main__":
     conn = psycopg2.connect(auth_key)
     print_tables(conn)
->>>>>>> edc61ab66e6c7c44f596011ad2e1b81e556aee79
